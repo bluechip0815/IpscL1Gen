@@ -4,6 +4,8 @@ IpscL1Gen ist ein browserbasierter Generator fuer Unterlagen zu IPSC Level-I-Mat
 
 Die Anwendung richtet sich an Matchveranstalter, Range Officer und Vereine, die wiederkehrend einfache Level-I-Matches vorbereiten und dafuer konsistente, pruefbare Unterlagen erzeugen wollen. Sie sammelt Match-Stammdaten und Stage-Informationen in einem Formular, prueft zentrale Plausibilitaets- und Sicherheitsregeln und erzeugt anschliessend ein ZIP-Archiv mit getrennten PDF-Dokumenten.
 
+![Screenshot der IpscL1Gen Web-App](Screenshot.png)
+
 ## Was die Anwendung erzeugt
 
 - GROI-Anschreiben fuer die Sanktionierung
