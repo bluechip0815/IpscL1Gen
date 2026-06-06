@@ -215,12 +215,55 @@ const createStagePlanSvg = (match: MatchData, stage: StageSummary) => {
   </svg>`
 }
 
+const stageTitle = (stage: StageSummary) => {
+  const stageNumberText = `Stage ${stage.stageNumber}`
+  const name = stage.stageName.trim()
+
+  if (!name || name.toLocaleLowerCase('de-DE') === stageNumberText.toLocaleLowerCase('de-DE')) {
+    return stageNumberText
+  }
+
+  return `${stageNumberText} ${name}`
+}
+
+const stageHeader = (match: MatchData, stage: StageSummary): PdfContent => ({
+  stack: [
+    {
+      columns: [
+        {
+          text: stageTitle(stage),
+          fontSize: 18,
+          bold: true,
+          color: '#143642',
+          margin: [0, 0, 0, 4],
+        },
+        {
+          stack: [
+            { text: `Match: ${match.matchName}`, bold: true },
+            { text: `Datum: ${asDate(match.matchDatum)}`, bold: true },
+          ],
+          alignment: 'left',
+          color: '#777777',
+          fontSize: 9,
+          margin: [16, 0, 0, 0],
+        },
+      ],
+      columnGap: 28,
+      widths: ['*', 250],
+    },
+    {
+      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2.5, lineColor: '#111111' }],
+      margin: [0, 2, 0, 14],
+    },
+  ],
+})
+
 export const createStageBriefingsDefinition = (match: MatchData, validation: ValidationResult): PdfDefinition =>
   documentBase(
     validation.stageSummaries.flatMap((stage, index) => {
       const content: PdfContent[] = [
         index > 0 ? { text: '', pageBreak: 'before' } : { text: '' },
-        { text: `Stage ${stage.stageNumber}: ${stage.stageName}`, style: 'h1' },
+        stageHeader(match, stage),
         { text: `${stage.courseType} | Comstock | Minimum number of rounds required: ${stage.stageSchusszahl}`, margin: [0, 0, 0, 10] },
         {
           columns: [
