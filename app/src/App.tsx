@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { createInitialMatch, createStage, defaultStartPositions } from './matchDefaults'
 import { generateMatchZip } from './pdfService'
+import { StagePlanPreview } from './stagePlan'
 import type { MatchData, StageData } from './types'
 import { validateMatch } from './validation'
 
@@ -243,6 +244,11 @@ function App() {
                   />
                 </div>
                 <TextAreaField label="Procedure" value={activeStage.ablauf} onChange={(value) => updateStage('ablauf', value)} />
+                {activeSummary ? (
+                  <div className="rounded border border-slate-200 bg-white">
+                    <StagePlanPreview match={match} stage={activeSummary} />
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>

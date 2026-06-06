@@ -1,6 +1,7 @@
 import JSZip from 'jszip'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import { createStagePlanSvg } from './stagePlan'
 import type { MatchData, StageSummary, ValidationResult } from './types'
 
 type PdfContent = Record<string, unknown> | string | Array<Record<string, unknown> | string>
@@ -177,42 +178,6 @@ export const createSummaryDefinition = (match: MatchData, validation: Validation
     },
     sourceNote,
   ])
-}
-
-const createStagePlanSvg = (match: MatchData, stage: StageSummary) => {
-  const width = 500
-  const height = 220
-  const pad = 28
-  const plotW = width - pad * 2
-  const yFor = (metersFromBackstop: number) => pad + (metersFromBackstop / match.standTiefe) * (height - pad * 2)
-  const faultY = yFor(stage.schuetzenPosition)
-  const steelY = yFor(stage.stahlEntfernung)
-  const targetDots = Array.from({ length: stage.anzahlPaper }, (_, index) => {
-    const x = pad + 35 + ((index % 6) * (plotW - 70)) / Math.max(1, Math.min(stage.anzahlPaper, 6) - 1)
-    const y = pad + 24 + Math.floor(index / 6) * 20
-    return `<rect x="${x - 5}" y="${y - 7}" width="10" height="14" rx="1" fill="#e9c46a" stroke="#806400" />`
-  }).join('')
-  const steelDots = Array.from({ length: stage.anzahlStahl }, (_, index) => {
-    const x = pad + 45 + ((index % 8) * (plotW - 90)) / Math.max(1, Math.min(stage.anzahlStahl, 8) - 1)
-    return `<circle cx="${x}" cy="${steelY}" r="5" fill="#9aa7b4" stroke="#526173" />`
-  }).join('')
-
-  return `
-  <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${pad}" y="${pad}" width="${plotW}" height="${height - pad * 2}" fill="#f7fafc" stroke="#143642" stroke-width="2"/>
-    ${Array.from({ length: 6 }, (_, i) => {
-      const y = pad + (i * (height - pad * 2)) / 5
-      return `<line x1="${pad}" x2="${width - pad}" y1="${y}" y2="${y}" stroke="#d7e0e8" stroke-width="1"/>`
-    }).join('')}
-    <line x1="${pad}" x2="${width - pad}" y1="${faultY}" y2="${faultY}" stroke="#d62828" stroke-width="3"/>
-    <text x="${width - pad - 130}" y="${faultY - 6}" font-size="11" fill="#9d1c1c">Fault Line ${stage.schuetzenPosition}m</text>
-    <line x1="${pad}" x2="${width - pad}" y1="${steelY}" y2="${steelY}" stroke="#526173" stroke-width="2" stroke-dasharray="5 4"/>
-    <text x="${pad + 8}" y="${steelY - 6}" font-size="11" fill="#526173">Steel ${stage.stahlEntfernung}m</text>
-    <text x="${pad + 8}" y="${pad - 8}" font-size="11" fill="#143642">Kugelfang / Backstop</text>
-    <text x="${pad + 8}" y="${height - 8}" font-size="11" fill="#143642">Rueckraum</text>
-    ${targetDots}
-    ${steelDots}
-  </svg>`
 }
 
 const stageTitle = (stage: StageSummary) => {
