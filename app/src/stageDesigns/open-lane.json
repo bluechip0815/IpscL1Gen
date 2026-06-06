@@ -2,19 +2,19 @@
   "id": "open-lane",
   "name": "Offene Linie",
   "description": "Gerade Fault Line ohne Barrieren; Targets stehen breit am Kugelfang.",
-  "faultLine": [{ "from": [0, 20], "to": [6, 20] }],
+  "faultLine": [{ "from": [0, 20], "to": [1, 20] }],
   "barriers": [],
   "paperSlots": [
-    { "x": 0.45, "y": 3.2 },
-    { "x": 1.7, "y": 3.2 },
-    { "x": 3, "y": 3.2 },
-    { "x": 4.3, "y": 3.2 },
-    { "x": 5.55, "y": 3.2 }
+    { "x": 0.075, "y": 3.2 },
+    { "x": 0.283, "y": 3.2 },
+    { "x": 0.5, "y": 3.2 },
+    { "x": 0.717, "y": 3.2 },
+    { "x": 0.925, "y": 3.2 }
   ],
   "steelSlots": [
-    { "x": 0.6, "y": 10 },
-    { "x": 5.4, "y": 10 },
-    { "x": 1.5, "y": 10 },
-    { "x": 4.5, "y": 10 }
+    { "x": 0.1, "y": 10 },
+    { "x": 0.9, "y": 10 },
+    { "x": 0.25, "y": 10 },
+    { "x": 0.75, "y": 10 }
   ]
 }

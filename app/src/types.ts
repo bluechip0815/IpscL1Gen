@@ -35,12 +35,16 @@ export type StageSummary = StageData & {
 }
 
 export type Point = {
+  /** Relative horizontal position, 0 = left edge, 1 = right edge. */
   x: number
+  /** Distance from backstop in meters. */
   y: number
 }
 
 export type StageLine = {
+  /** [relative x, meters from backstop] */
   from: [number, number]
+  /** [relative x, meters from backstop] */
   to: [number, number]
 }
 

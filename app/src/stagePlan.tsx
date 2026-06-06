@@ -15,7 +15,7 @@ const repeatSlots = (slots: Point[], count: number) =>
   })
 
 const scalePoint = (match: MatchData, width: number, height: number, pad: number, point: Point) => ({
-  x: pad + (clamp(point.x, 0, match.standBreite) / match.standBreite) * (width - pad * 2),
+  x: pad + clamp(point.x, 0, 1) * (width - pad * 2),
   y: pad + (clamp(point.y, 0, match.standTiefe) / match.standTiefe) * (height - pad * 2),
 })
 
@@ -68,9 +68,9 @@ export const createStagePlanSvg = (match: MatchData, stage: StageSummary, width 
   const plotW = width - pad * 2
   const plotH = height - pad * 2
   const yOffset = getFaultLineOffset(stage.stageDesignId, stage.schuetzenPosition)
-  const steelLabel = scalePoint(match, width, height, pad, { x: 0.12 * match.standBreite, y: stage.stahlEntfernung })
+  const steelLabel = scalePoint(match, width, height, pad, { x: 0.12, y: stage.stahlEntfernung })
   const deepestFaultY = Math.max(...design.faultLine.flatMap((segment) => [segment.from[1] + yOffset, segment.to[1] + yOffset]))
-  const faultLabel = scalePoint(match, width, height, pad, { x: 0.7 * match.standBreite, y: deepestFaultY })
+  const faultLabel = scalePoint(match, width, height, pad, { x: 0.7, y: deepestFaultY })
 
   return `
   <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematische Stage-Vorschau: ${design.name}">
