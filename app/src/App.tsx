@@ -144,13 +144,13 @@ function App() {
         <section className="grid gap-5">
           <div className="rounded border border-slate-200 bg-white p-4">
             <h2 className="mb-4 text-lg font-semibold text-slate-950">Stammdaten</h2>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-3">
+              <TextField label="Verein / Stand" value={match.verein} onChange={(value) => updateMatch('verein', value)} />
               <TextField label="Matchname" value={match.matchName} onChange={(value) => updateMatch('matchName', value)} />
               <TextField label="Matchdatum" type="date" value={match.matchDatum} onChange={(value) => updateMatch('matchDatum', value)} />
-              <TextField label="Verein / Stand" value={match.verein} onChange={(value) => updateMatch('verein', value)} />
               <TextField label="Leitender Range Officer" value={match.rangeOfficer} onChange={(value) => updateMatch('rangeOfficer', value)} />
               <TextField label="GROI-ID" value={match.groiId} onChange={(value) => updateMatch('groiId', value)} />
-              <div className="rounded border border-slate-200 bg-slate-50 px-3 py-2">
+              <div className="min-h-[70px] rounded border border-slate-200 bg-slate-50 px-3 py-2">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Gesamtschusszahl</p>
                 <p className="mt-1 text-lg font-semibold text-slate-950">{validation.stageRoundSum}</p>
                 <p className="text-xs text-slate-500">Automatisch aus allen Stages berechnet</p>
