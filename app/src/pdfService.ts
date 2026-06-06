@@ -7,10 +7,16 @@ type PdfContent = Record<string, unknown> | string | Array<Record<string, unknow
 type PdfDefinition = Record<string, unknown>
 const pdfRuntime = pdfMake as unknown as {
   vfs: Record<string, string>
-  createPdf: (definition: PdfDefinition) => { getBlob: (callback: (blob: Blob) => void) => void }
+  addVirtualFileSystem?: (vfs: Record<string, string>) => void
+  createPdf: (definition: PdfDefinition) => {
+    getBlob: ((callback: (blob: Blob) => void) => void) | (() => Promise<Blob>)
+  }
 }
 
-pdfRuntime.vfs = (pdfFonts as unknown as { vfs: Record<string, string> }).vfs
+const fontVfs = pdfFonts as unknown as { vfs?: Record<string, string> } & Record<string, string>
+const resolvedFontVfs = fontVfs.vfs ?? fontVfs
+pdfRuntime.vfs = resolvedFontVfs
+pdfRuntime.addVirtualFileSystem?.(resolvedFontVfs)
 
 const pageFooter = (currentPage: number, pageCount: number) => ({
   text: `Seite ${currentPage} von ${pageCount}`,
@@ -51,10 +57,22 @@ const sanitizeFilePart = (value: string) =>
     .replace(/\s+/g, '_')
     .slice(0, 80) || 'IPSC_Level_I'
 
-const pdfBlob = (definition: PdfDefinition) =>
-  new Promise<Blob>((resolve) => {
-    pdfRuntime.createPdf(definition).getBlob((blob) => resolve(blob))
+const pdfBlob = (definition: PdfDefinition) => {
+  const pdf = pdfRuntime.createPdf(definition)
+  const maybeBlob = (pdf.getBlob as () => Promise<Blob> | Blob | undefined)()
+
+  if (maybeBlob instanceof Blob) {
+    return Promise.resolve(maybeBlob)
+  }
+
+  if (maybeBlob && typeof maybeBlob.then === 'function') {
+    return maybeBlob
+  }
+
+  return new Promise<Blob>((resolve) => {
+    ;(pdf.getBlob as (callback: (blob: Blob) => void) => void)((blob) => resolve(blob))
   })
+}
 
 const sourceNote = {
   text:

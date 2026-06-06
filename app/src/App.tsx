@@ -113,6 +113,9 @@ function App() {
     setIsGenerating(true)
     try {
       await generateMatchZip(match, validation)
+    } catch (error) {
+      console.error(error)
+      window.alert('Der ZIP-Export ist fehlgeschlagen. Bitte pruefe die Eingaben und versuche es erneut.')
     } finally {
       setIsGenerating(false)
     }
