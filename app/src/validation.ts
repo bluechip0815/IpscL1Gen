@@ -1,4 +1,5 @@
 import type { CourseType, MatchData, StageSummary, ValidationIssue, ValidationResult } from './types'
+import { getClosestFaultLineDistance } from './stageDesigns'
 
 const classifyStage = (rounds: number): CourseType => {
   if (rounds <= 12) return 'Short Course'
@@ -13,8 +14,9 @@ export const validateMatch = (match: MatchData): ValidationResult => {
   const stageSummaries: StageSummary[] = match.stages.map((stage, index) => {
     const stageSchusszahl = getStageRounds(stage.anzahlPaper, stage.anzahlStahl)
     const courseType = classifyStage(stageSchusszahl)
+    const closestFaultLine = getClosestFaultLineDistance(stage.stageDesignId, stage.schuetzenPosition)
     const stahlAbstand =
-      stage.anzahlStahl > 0 ? Number((stage.schuetzenPosition - stage.stahlEntfernung).toFixed(2)) : null
+      stage.anzahlStahl > 0 ? Number((closestFaultLine - stage.stahlEntfernung).toFixed(2)) : null
     const safetyStatus = stage.anzahlStahl === 0 ? 'Nicht relevant' : stahlAbstand !== null && stahlAbstand >= 8 ? 'OK' : 'Fehler'
 
     return {

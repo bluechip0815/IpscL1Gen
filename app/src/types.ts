@@ -13,6 +13,7 @@ export type MatchData = {
 export type StageData = {
   id: string
   stageName: string
+  stageDesignId: string
   anzahlPaper: number
   anzahlStahl: number
   schuetzenPosition: number
@@ -31,6 +32,26 @@ export type StageSummary = StageData & {
   courseType: CourseType
   stahlAbstand: number | null
   safetyStatus: 'OK' | 'Nicht relevant' | 'Fehler'
+}
+
+export type Point = {
+  x: number
+  y: number
+}
+
+export type StageLine = {
+  from: [number, number]
+  to: [number, number]
+}
+
+export type StageDesign = {
+  id: string
+  name: string
+  description: string
+  faultLine: StageLine[]
+  barriers: StageLine[]
+  paperSlots: Point[]
+  steelSlots: Point[]
 }
 
 export type ValidationIssue = {

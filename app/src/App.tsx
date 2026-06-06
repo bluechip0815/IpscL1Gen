@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { createInitialMatch, createStage, defaultStartPositions } from './matchDefaults'
 import { generateMatchZip } from './pdfService'
+import { stageDesigns } from './stageDesigns'
 import { StagePlanPreview } from './stagePlan'
 import type { MatchData, StageData } from './types'
 import { validateMatch } from './validation'
@@ -196,6 +197,20 @@ function App() {
                   </div>
                   <NumberField label="IPSC Targets (Paper)" value={activeStage.anzahlPaper} min={0} onChange={(value) => updateStage('anzahlPaper', value)} />
                   <NumberField label="Stahl-Ziele" value={activeStage.anzahlStahl} min={0} onChange={(value) => updateStage('anzahlStahl', value)} />
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700 md:col-span-2">
+                    <span>Stage Design</span>
+                    <select
+                      className="rounded border border-slate-300 bg-white px-3 py-2 text-slate-950 outline-none focus:border-teal-700"
+                      value={activeStage.stageDesignId}
+                      onChange={(event) => updateStage('stageDesignId', event.target.value)}
+                    >
+                      {stageDesigns.map((design) => (
+                        <option key={design.id} value={design.id}>
+                          {design.name} - {design.description}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                   <NumberField
                     label="Vorderste Fault Line vom Kugelfang"
                     value={activeStage.schuetzenPosition}

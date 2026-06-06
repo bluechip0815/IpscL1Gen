@@ -9,6 +9,7 @@ export const defaultStartPositions = [
 export const createStage = (index: number): StageData => ({
   id: crypto.randomUUID(),
   stageName: `Stage ${index}`,
+  stageDesignId: 'open-lane',
   anzahlPaper: 5,
   anzahlStahl: 2,
   schuetzenPosition: 20,
