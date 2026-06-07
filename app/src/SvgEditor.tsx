@@ -226,8 +226,8 @@ function SvgEditor() {
           </div>
         </div>
 
-        <div className="mb-4 grid gap-4 md:grid-cols-[minmax(0,1fr)_160px_120px]">
-          <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+        <div className="mb-4 flex flex-wrap items-end gap-4">
+          <label className="grid min-w-[220px] flex-1 gap-1.5 text-sm font-medium text-slate-700">
             <span>Design Name</span>
             <input
               className="rounded border border-slate-300 bg-white px-3 py-2 text-slate-950 outline-none focus:border-teal-700"
@@ -235,7 +235,7 @@ function SvgEditor() {
               onChange={(event) => setDesign((current) => ({ ...current, name: event.target.value }))}
             />
           </label>
-          <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+          <label className="grid w-28 gap-1.5 text-sm font-medium text-slate-700">
             <span>Standtiefe</span>
             <input
               className="rounded border border-slate-300 bg-white px-3 py-2 text-slate-950 outline-none focus:border-teal-700"
@@ -245,7 +245,11 @@ function SvgEditor() {
               onChange={(event) => setStandTiefe(clamp(Number(event.target.value) || 25, 1, 50))}
             />
           </label>
-          <button type="button" onClick={clearToolObjects} className="self-end rounded border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+          <button
+            type="button"
+            onClick={clearToolObjects}
+            className="min-h-10 rounded border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
             Auswahl leeren
           </button>
         </div>
