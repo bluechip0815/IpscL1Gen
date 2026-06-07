@@ -3,6 +3,7 @@ import { createInitialMatch, createStage, defaultStartPositions } from './matchD
 import { generateMatchZip } from './pdfService'
 import { stageDesigns } from './stageDesigns'
 import { StagePlanPreview } from './stagePlan'
+import SvgEditor from './SvgEditor'
 import type { MatchData, StageData } from './types'
 import { validateMatch } from './validation'
 
@@ -78,6 +79,7 @@ function TextAreaField({ label, value, onChange }: { label: string; value: strin
 }
 
 function App() {
+  const [page, setPage] = useState<'generator' | 'editor'>('generator')
   const [match, setMatch] = useState<MatchData>(() => createInitialMatch())
   const [selectedStage, setSelectedStage] = useState(0)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -131,17 +133,38 @@ function App() {
             <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">IPSC Level I</p>
             <h1 className="text-2xl font-semibold text-slate-950">Match-Unterlagen Generator</h1>
           </div>
-          <button
-            type="button"
-            disabled={!validation.canGenerate || isGenerating}
-            onClick={handleGenerate}
-            className="rounded bg-teal-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
-            {isGenerating ? 'ZIP wird erstellt...' : 'PDFs als ZIP generieren'}
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex overflow-hidden rounded border border-slate-300 bg-white">
+              <button
+                type="button"
+                onClick={() => setPage('generator')}
+                className={`px-3 py-2 text-sm font-semibold ${page === 'generator' ? 'bg-teal-700 text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                Generator
+              </button>
+              <button
+                type="button"
+                onClick={() => setPage('editor')}
+                className={`border-l border-slate-300 px-3 py-2 text-sm font-semibold ${page === 'editor' ? 'bg-teal-700 text-white' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                SVG-Editor
+              </button>
+            </div>
+            {page === 'generator' ? (
+              <button
+                type="button"
+                disabled={!validation.canGenerate || isGenerating}
+                onClick={handleGenerate}
+                className="rounded bg-teal-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+              >
+                {isGenerating ? 'ZIP wird erstellt...' : 'PDFs als ZIP generieren'}
+              </button>
+            ) : null}
+          </div>
         </div>
       </header>
 
+      {page === 'editor' ? <SvgEditor /> : (
       <div className="mx-auto grid max-w-7xl gap-5 px-5 py-5 lg:grid-cols-[minmax(0,1fr)_390px]">
         <section className="grid gap-5">
           <div className="rounded border border-slate-200 bg-white p-4">
@@ -332,6 +355,7 @@ function App() {
           </div>
         </aside>
       </div>
+      )}
     </main>
   )
 }

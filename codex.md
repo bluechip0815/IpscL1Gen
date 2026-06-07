@@ -52,6 +52,24 @@ Wichtig: In den JSON-Dateien sind X-Koordinaten relativ:
 
 Y-Koordinaten bleiben Meter ab Kugelfang. Dadurch skalieren alle Objekte korrekt mit der eingestellten Standbreite.
 
+## SVG-Editor
+
+Es gibt eine zweite App-Seite `SVG-Editor`, erreichbar ueber die Umschaltung im Header. Die Komponente liegt in:
+
+```text
+app/src/SvgEditor.tsx
+```
+
+Der Editor kann im Browser einfache Designvorlagen erstellen und exportieren:
+
+- Paper-Ziel-Slots
+- Stahl-Ziel-Slots
+- Barrieren
+- Fault-Line-Segmente
+- Startpositionen
+
+Der Export erzeugt SVG und JSON. Die JSON-Struktur ist kompatibel mit den Stage-Design-Grunddaten: X relativ von `0` bis `1`, Y in Metern ab Kugelfang.
+
 ## Validierung
 
 Die zentrale Validierungslogik liegt in:
@@ -68,6 +86,7 @@ Bei mehrteiligen Fault Lines wird fuer den Stahlabstand die vorderste Fault-Line
 app/src/App.tsx              UI und Formularlogik
 app/src/pdfService.ts        PDF- und ZIP-Erzeugung
 app/src/stagePlan.tsx        gemeinsame SVG-Vorschau fuer UI und PDF
+app/src/SvgEditor.tsx        zweite Seite zum Erstellen von SVG/JSON-Designs
 app/src/stageDesigns.ts      Registry der Stage-Designs
 app/src/stageDesigns/        Design-Dateien
 app/src/types.ts             zentrale Typen
@@ -108,3 +127,4 @@ Das hat die Arbeit nicht blockiert.
 - `859ed7c` Show stage plan preview in editor
 - `3fa24a4` Add selectable stage design templates
 - `2d712ed` Use relative stage design positions
+- SVG-Editor wurde danach als zweite Seite ergaenzt.
