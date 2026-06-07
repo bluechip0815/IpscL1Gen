@@ -78,6 +78,8 @@ function TextAreaField({ label, value, onChange }: { label: string; value: strin
   )
 }
 
+const formatSteelDistance = (distance: number | null) => (distance === null ? 'keine Sichtlinie' : `${distance}m`)
+
 function App() {
   const [page, setPage] = useState<'generator' | 'editor'>('generator')
   const [match, setMatch] = useState<MatchData>(() => createInitialMatch())
@@ -215,7 +217,7 @@ function App() {
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Berechnet</p>
                     <p className="mt-1 text-sm text-slate-950">
                       {activeSummary?.courseType} · {activeSummary?.stageSchusszahl ?? 0} Schuss · Stahlabstand{' '}
-                      {activeSummary?.stahlAbstand ?? '-'}m
+                      {activeSummary ? formatSteelDistance(activeSummary.stahlAbstand) : '-'}
                     </p>
                   </div>
                   <NumberField label="IPSC Targets (Paper)" value={activeStage.anzahlPaper} min={0} onChange={(value) => updateStage('anzahlPaper', value)} />
@@ -346,7 +348,7 @@ function App() {
                       <td className="px-2 py-2">{stage.stageNumber}</td>
                       <td className="px-2 py-2">{stage.courseType.replace(' Course', '')}</td>
                       <td className="px-2 py-2">{stage.stageSchusszahl}</td>
-                      <td className="px-2 py-2">{stage.anzahlStahl > 0 ? `${stage.stahlAbstand}m` : '-'}</td>
+                      <td className="px-2 py-2">{stage.anzahlStahl > 0 ? formatSteelDistance(stage.stahlAbstand) : '-'}</td>
                     </tr>
                   ))}
                 </tbody>

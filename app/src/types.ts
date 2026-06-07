@@ -31,7 +31,7 @@ export type StageSummary = StageData & {
   stageSchusszahl: number
   courseType: CourseType
   stahlAbstand: number | null
-  safetyStatus: 'OK' | 'Nicht relevant' | 'Fehler'
+  safetyStatus: 'OK' | 'Nicht relevant' | 'Keine Sichtlinie' | 'Fehler'
 }
 
 export type Point = {

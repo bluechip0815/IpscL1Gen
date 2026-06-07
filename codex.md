@@ -82,6 +82,15 @@ app/src/validation.ts
 
 Bei mehrteiligen Fault Lines wird fuer den Stahlabstand die vorderste Fault-Line-Tiefe des gewaehlten Designs verwendet. Die Design-Geometrie wird relativ zum Feld `schuetzenPosition` verschoben.
 
+Stahlabstaende werden inzwischen abschnittsweise sichtlinienbasiert berechnet:
+
+- Fault-Line-Segmente werden in Punkte gesampelt.
+- Stahlziele kommen aus den `steelSlots` des Designs.
+- Barrieren aus `barriers` werden als schuss-/sichthemmende Linien genutzt.
+- Eine Fault-Line-Position zaehlt nur, wenn die Sichtlinie zum Stahl keine Barriere schneidet.
+
+Die blauen Linien aus Skizzen sind daher nur abgeleitete Analyse-/Hilfslinien und muessen nicht als eigene Designobjekte gespeichert werden.
+
 ## Relevante Dateien
 
 ```text

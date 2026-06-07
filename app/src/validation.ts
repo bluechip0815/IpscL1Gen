@@ -1,5 +1,5 @@
+import { getVisibleSteelDistance } from './stageGeometry'
 import type { CourseType, MatchData, StageSummary, ValidationIssue, ValidationResult } from './types'
-import { getClosestFaultLineDistance } from './stageDesigns'
 
 const classifyStage = (rounds: number): CourseType => {
   if (rounds <= 12) return 'Short Course'
@@ -14,10 +14,17 @@ export const validateMatch = (match: MatchData): ValidationResult => {
   const stageSummaries: StageSummary[] = match.stages.map((stage, index) => {
     const stageSchusszahl = getStageRounds(stage.anzahlPaper, stage.anzahlStahl)
     const courseType = classifyStage(stageSchusszahl)
-    const closestFaultLine = getClosestFaultLineDistance(stage.stageDesignId, stage.schuetzenPosition)
-    const stahlAbstand =
-      stage.anzahlStahl > 0 ? Number((closestFaultLine - stage.stahlEntfernung).toFixed(2)) : null
-    const safetyStatus = stage.anzahlStahl === 0 ? 'Nicht relevant' : stahlAbstand !== null && stahlAbstand >= 8 ? 'OK' : 'Fehler'
+    const stagePreview = {
+      ...stage,
+      stageNumber: index + 1,
+      stageSchusszahl,
+      courseType,
+      stahlAbstand: null,
+      safetyStatus: 'Nicht relevant',
+    } as StageSummary
+    const stahlAbstand = getVisibleSteelDistance(match, stagePreview)
+    const safetyStatus =
+      stage.anzahlStahl === 0 ? 'Nicht relevant' : stahlAbstand === null ? 'Keine Sichtlinie' : stahlAbstand >= 8 ? 'OK' : 'Fehler'
 
     return {
       ...stage,
@@ -107,13 +114,19 @@ export const validateMatch = (match: MatchData): ValidationResult => {
         issues.push({
           id: `steel-min-${stage.id}`,
           level: 'error',
-          message: `Sicherheitsfehler auf Stage ${stage.stageNumber}: Der Abstand zum Stahl beträgt ${stage.stahlAbstand}m. Laut IPSC-Regelwerk muss der Mindestabstand zu Metallzielen 7 Meter betragen.`,
+          message: `Sicherheitsfehler auf Stage ${stage.stageNumber}: Der sichtbare Abstand zum Stahl beträgt ${stage.stahlAbstand}m. Laut IPSC-Regelwerk muss der Mindestabstand zu Metallzielen 7 Meter betragen.`,
         })
       } else if (stage.stahlAbstand !== null && stage.stahlAbstand < 8) {
         issues.push({
           id: `steel-faultline-${stage.id}`,
           level: 'error',
-          message: `Sicherheitsfehler auf Stage ${stage.stageNumber}: Fault Lines zu Metallzielen müssen mindestens 8m entfernt sein, damit ein versehentliches Übertreten nicht unter 7m führt.`,
+          message: `Sicherheitsfehler auf Stage ${stage.stageNumber}: Sichtbare Fault-Line-Abschnitte zu Metallzielen müssen mindestens 8m entfernt sein, damit ein versehentliches Übertreten nicht unter 7m führt.`,
+        })
+      } else if (stage.stahlAbstand === null) {
+        issues.push({
+          id: `steel-hidden-${stage.id}`,
+          level: 'warning',
+          message: `Stage ${stage.stageNumber}: Für die Stahlziele wurde keine freie Sichtlinie von einer Fault Line gefunden. Bitte Barrieren und Stahlpositionen prüfen.`,
         })
       }
     }

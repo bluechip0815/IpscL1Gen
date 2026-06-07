@@ -58,6 +58,8 @@ const sanitizeFilePart = (value: string) =>
     .replace(/\s+/g, '_')
     .slice(0, 80) || 'IPSC_Level_I'
 
+const formatSteelDistance = (distance: number | null) => (distance === null ? 'keine Sichtlinie' : `${distance}m`)
+
 const pdfBlob = (definition: PdfDefinition) => {
   const pdf = pdfRuntime.createPdf(definition)
   const maybeBlob = (pdf.getBlob as () => Promise<Blob> | Blob | undefined)()
@@ -156,7 +158,7 @@ export const createSummaryDefinition = (match: MatchData, validation: Validation
             String(stage.anzahlStahl),
             String(stage.stageSchusszahl),
             'Comstock',
-            stage.safetyStatus === 'OK' ? `OK (${stage.stahlAbstand}m)` : stage.safetyStatus,
+            stage.safetyStatus === 'OK' ? `OK (${formatSteelDistance(stage.stahlAbstand)})` : stage.safetyStatus,
           ]),
           [
             { text: 'Summe', bold: true },
@@ -265,7 +267,7 @@ export const createStageBriefingsDefinition = (match: MatchData, validation: Val
         },
         { svg: createStagePlanSvg(match, stage), width: 500, margin: [0, 0, 0, 8] },
         {
-          text: `Geometrie: vorderste Fault Line ${stage.schuetzenPosition}m vom Kugelfang, Stahl ${stage.stahlEntfernung}m vom Kugelfang, Abstand ${stage.stahlAbstand ?? '-'}m.`,
+          text: `Geometrie: vorderste Fault Line ${stage.schuetzenPosition}m vom Kugelfang, Stahl ${stage.stahlEntfernung}m vom Kugelfang, sichtbarer Abstand ${formatSteelDistance(stage.stahlAbstand)}.`,
           style: 'small',
         },
       ]
