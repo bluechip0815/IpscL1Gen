@@ -1,10 +1,11 @@
 import centerChannel from './stageDesigns/center-channel.json'
+import dyn from './stageDesigns/dyn.json'
 import offsetWalls from './stageDesigns/offset-walls.json'
 import openLane from './stageDesigns/open-lane.json'
 import splitPorts from './stageDesigns/split-ports.json'
 import type { StageDesign } from './types'
 
-export const stageDesigns = [openLane, splitPorts, offsetWalls, centerChannel] as StageDesign[]
+export const stageDesigns = [openLane, splitPorts, offsetWalls, centerChannel, dyn] as StageDesign[]
 
 export const defaultStageDesignId = stageDesigns[0].id
 
