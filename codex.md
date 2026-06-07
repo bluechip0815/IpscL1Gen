@@ -45,6 +45,8 @@ Jeder Typ besteht aus:
   - `paperSlots`
   - `steelSlots`
 
+Die JSON-Dateien werden in `app/src/stageDesigns.ts` per `import.meta.glob('./stageDesigns/*.json', { eager: true })` automatisch eingesammelt. Neue Designs muessen also nicht mehr manuell importiert werden. Datei in den Ordner legen, Dev-Server neu laden bzw. Produktion neu bauen.
+
 Wichtig: In den JSON-Dateien sind X-Koordinaten relativ:
 
 - `x: 0` = linke Standkante
