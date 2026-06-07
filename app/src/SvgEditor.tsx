@@ -55,6 +55,17 @@ const roundPoint = (point: EditorPoint) => ({
   y: Number(point.y.toFixed(1)),
 })
 
+const snapLineEnd = (from: EditorPoint, to: EditorPoint) => {
+  const deltaX = Math.abs(to.x - from.x)
+  const deltaY = Math.abs(to.y - from.y)
+
+  if (deltaX >= deltaY) {
+    return roundPoint({ x: to.x, y: from.y })
+  }
+
+  return roundPoint({ x: from.x, y: to.y })
+}
+
 const editorJson = (design: EditorDesign) =>
   JSON.stringify(
     {
@@ -171,7 +182,7 @@ function SvgEditor() {
       return
     }
 
-    const line = { id: crypto.randomUUID(), from: lineStart, to: point }
+    const line = { id: crypto.randomUUID(), from: lineStart, to: snapLineEnd(lineStart, point) }
     setDesign((current) =>
       activeTool === 'barrier'
         ? { ...current, barriers: [...current.barriers, line] }
